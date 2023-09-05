@@ -44,19 +44,19 @@ public class AppViewModel {
      * @param loadList
      */
     public AppViewModel(App app, HttpServletRequest request, boolean loadList) {
-        String httpURL = PathManager.request(request).getBaseURL();
+        String httpsURL = PathManager.request(request).useHttps().getBaseURL();
         this.id = app.getId();
         this.platform = app.getPlatform();
         this.bundleID = app.getBundleID();
         app.getCurrentPackage().setApp(app);
         this.userId = app.getOwner().getId();
-        this.icon =  httpURL + "/fetch/" + app.getCurrentPackage().getIconFile().getKey();
+        this.icon =  httpsURL + "/fetch/" + app.getCurrentPackage().getIconFile().getKey();
         Package aPackage = findPackageById(app, null);
         this.version = aPackage.getVersion();
         this.buildVersion = aPackage.getBuildVersion();
         this.shortCode = app.getShortCode();
         this.name = app.getName();
-        this.installPath = httpURL + "/s/" + app.getShortCode();
+        this.installPath = httpsURL + "/s/" + app.getShortCode();
         this.minVersion = aPackage.getMinVersion();
         this.currentPackage = new PackageViewModel(aPackage, request);
         if (loadList) {
@@ -66,17 +66,17 @@ public class AppViewModel {
     }
 
     public AppViewModel(App app, HttpServletRequest request, String packageId) {
-        String httpURL = PathManager.request(request).getBaseURL();
+        String httpsURL = PathManager.request(request).useHttps().getBaseURL();
         this.id = app.getId();
         this.platform = app.getPlatform();
         this.bundleID = app.getBundleID();
-        this.icon =  httpURL + "/fetch/" + app.getCurrentPackage().getIconFile().getKey();
+        this.icon =  httpsURL + "/fetch/" + app.getCurrentPackage().getIconFile().getKey();
         Package aPackage = findPackageById(app, packageId);
         this.version = aPackage.getVersion();
         this.buildVersion = aPackage.getBuildVersion();
         this.shortCode = app.getShortCode();
         this.name = app.getName();
-        this.installPath = httpURL + "/s/" + app.getShortCode();
+        this.installPath = httpsURL + "/s/" + app.getShortCode();
         this.minVersion = aPackage.getMinVersion();
         this.currentPackage = new PackageViewModel(aPackage, request);
     }

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 获取 webHook 列表
  */
 function getWebHooks() {
@@ -69,7 +69,7 @@ function getPackageList() {
                 var buildVersion = package.buildVersion;
                 var displayTime = package.displayTime;
                 var type = package.type;
-                var downloadURL = package.downloadURL;
+                var downloadURL = package.safeDownloadURL;
                 var displaySize = package.displaySize;
                 var previewURL = package.previewURL;
                 var id = package.id;

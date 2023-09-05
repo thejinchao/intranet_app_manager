@@ -39,9 +39,8 @@ public class PackageViewModel {
     private String iconKey;
 
     public PackageViewModel(Package aPackage, HttpServletRequest request) {
-        String httpURL = PathManager.request(request).getBaseURL();
         String httpsURL = PathManager.request(request).useHttps().getBaseURL();
-        this.downloadURL = httpURL + "/p/" + aPackage.getId();
+        this.downloadURL = httpsURL + "/p/" + aPackage.getId();
         this.safeDownloadURL = httpsURL + "/p/" + aPackage.getId();
         this.id = aPackage.getId();
         this.version = aPackage.getVersion();
@@ -64,9 +63,9 @@ public class PackageViewModel {
             }
         } else if (aPackage.getPlatform().equals("android")) {
             this.iOS = false;
-            this.installURL = httpURL + "/p/" + aPackage.getId();
+            this.installURL = httpsURL + "/p/" + aPackage.getId();
         }
-        this.previewURL = httpURL + "/s/" + aPackage.getApp().getShortCode() + "?id=" + aPackage.getId();
+        this.previewURL = httpsURL + "/s/" + aPackage.getApp().getShortCode() + "?id=" + aPackage.getId();
         if (this.isiOS()) {
             if (aPackage.getProvision() == null) {
                 this.type = "内测版";
