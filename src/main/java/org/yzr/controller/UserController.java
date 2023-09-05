@@ -5,6 +5,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.yzr.model.User;
 import org.yzr.service.UserService;
 import org.yzr.utils.IpUtil;
+import org.yzr.utils.file.PathManager;
 import org.yzr.utils.response.BaseResponse;
 import org.yzr.utils.response.ResponseUtil;
+import org.yzr.vo.AppViewModel;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.List;
 
 import static org.yzr.utils.response.ResponseCode.USER_INVALID_ACCOUNT;
 
@@ -81,11 +86,10 @@ public class UserController {
     }
 
     @GetMapping("/account/logout")
-    @ResponseBody
-    public BaseResponse logout() {
+    public String logout() {
         Subject currentUser = SecurityUtils.getSubject();
         currentUser.logout();
-        return ResponseUtil.ok();
+        return "signin";
     }
 
     @GetMapping("/account/signin")
@@ -93,8 +97,22 @@ public class UserController {
         return "signin";
     }
 
+    @RequiresAuthentication
     @GetMapping("/account/signup")
     public String signup(HttpServletRequest request) {
+
+        try {
+            Subject currentUser = SecurityUtils.getSubject();
+            User user = (User) currentUser.getPrincipal();
+            if(user==null || !user.getUsername().equals("admin")) {
+                String username = user.getUsername();
+                return "signin";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "signin";
+        }
+
         return "signup";
     }
 }
