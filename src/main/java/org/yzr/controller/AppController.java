@@ -28,6 +28,24 @@ public class AppController {
     @Resource
     private AppService appService;
 
+    @GetMapping("/")
+    public String home(HttpServletRequest request) {
+        try {
+            Subject currentUser = SecurityUtils.getSubject();
+            User user = (User) currentUser.getPrincipal();
+            if (user == null) {
+                return "signin";
+            }
+            List<AppViewModel> apps = this.appService.findByUser(user, request);
+            request.setAttribute("apps", apps);
+            request.setAttribute("baseURL", PathManager.request(request).getBaseURL());
+            request.setAttribute("token", user.getToken());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "index";
+    }
+
     @RequiresAuthentication
     @GetMapping("/apps")
     public String apps(HttpServletRequest request) {
